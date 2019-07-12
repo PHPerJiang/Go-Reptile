@@ -11,6 +11,7 @@ func Run(seeds ...Request)  {
 		requests = append(requests, r)
 	}
 
+	//如果请求列表不为空则继续抓取
 	for len(requests) > 0{
 		r := requests[0]
 		requests = requests[1:]
@@ -21,7 +22,7 @@ func Run(seeds ...Request)  {
 			log.Printf("Fetcher: error fetching url %s: %v",r.Url, err)
 			continue
 		}
-
+		//调用解析器
 		parseRequest := r.ParseFunc(body)
 		requests = append(requests, parseRequest.Requests...)
 
