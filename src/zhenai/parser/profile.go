@@ -2,10 +2,8 @@ package parser
 
 import (
 	"engine"
-	"log"
 	"model"
 	"regexp"
-	"strconv"
 )
 
 //编译正则
@@ -23,10 +21,7 @@ func ParseProfile(contents []byte, name string)engine.ParseResult  {
 	profile.Marriage = marriage
 
 	//年纪
-	age, err := strconv.Atoi(extractString(contents,2, reg))
-	if err != nil {
-		log.Fatal(err)
-	}
+	age := extractString(contents,2, reg)
 	profile.Age = age
 
 	//星座
@@ -34,17 +29,11 @@ func ParseProfile(contents []byte, name string)engine.ParseResult  {
 	profile.Xingzuo = xingzuo
 
 	//身高
-	height,err := strconv.Atoi(extractString(contents,4, reg))
-	if err != nil {
-		log.Fatal(err)
-	}
+	height := extractString(contents,4, reg)
 	profile.Height = height
 
 	//体重
-	weight,err := strconv.Atoi(extractString(contents,5,reg))
-	if err != nil {
-		log.Fatal(err)
-	}
+	weight := extractString(contents,5,reg)
 	profile.Weight = weight
 
 	//工作地

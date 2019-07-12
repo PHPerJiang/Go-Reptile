@@ -5,12 +5,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
+
+var rateLimiter = time.Tick(100 * time.Microsecond)
 
 func Fetch(url string)([]byte, error) {
 	//由于get会遇到403所以换方式
 	//resp,err := http.Get(url);
-
+	<-rateLimiter
 	client := &http.Client{}
 	req, err := http.NewRequest("GET",url,nil)
 	if err != nil {
