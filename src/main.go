@@ -9,6 +9,7 @@ import (
 func main() {
 	e := engine.ConcurrentEngine{
 		Scheduler: &scheduler.SimpleScheduler{},
+		//开启n个协程
 		WorkerCount:10,
 	}
 
