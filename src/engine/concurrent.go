@@ -13,17 +13,17 @@ type ConcurrentEngine struct {
 type Scheduler interface {
 	Submit(Request)
 	ConfigureMasterWorkerChan(chan Request)
+	WorkerReady(chan Request)
+	Run()
 }
 
 func (e *ConcurrentEngine) Run(seeds ...Request) {
-	//初始化chan
-	in := make(chan Request)
 	out := make(chan ParseResult)
-	e.Scheduler.ConfigureMasterWorkerChan(in)
+	e.Scheduler.Run()
 
 	//创建worker
 	for i := 0; i < e.WorkerCount; i++ {
-		createWorker(in, out)
+		createWorker(out, e.Scheduler)
 	}
 
 	//解析参数
@@ -48,10 +48,12 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 }
 
 //创建worker
-func createWorker(in chan Request, out chan ParseResult) {
+func createWorker(out chan ParseResult, s Scheduler) {
 	//并发
+	in := make(chan Request)
 	go func() {
 		for {
+			s.WorkerReady(in)
 			//从管道中取出一个请求
 			request := <-in
 			//交给worker进行处理
