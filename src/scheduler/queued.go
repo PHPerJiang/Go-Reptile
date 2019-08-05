@@ -1,10 +1,17 @@
 package scheduler
 
-import "engine"
+import (
+	"engine"
+)
 
+//队列调度器
 type QueuedScheduler struct {
 	requestChan chan engine.Request
 	workerChan  chan chan engine.Request
+}
+
+func (s *QueuedScheduler) WorkerChan() chan engine.Request {
+	return make(chan engine.Request)
 }
 
 //向请求通道发送请求
